@@ -1,2 +1,8 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using WebSiteDownloader;
+using WebSiteDownloader.Helpers.FileReader;
+using WebSiteDownloader.Helpers.FileWriter;
+using WebSiteDownloader.Helpers.WebSiteDownlodingService;
+
+WebSiteDownloadCommand webSiteDownloadCommand = new WebSiteDownloadCommand(new URLListReader(),new FileWriter(),new WebSiteDownlodingService());
+await webSiteDownloadCommand.Parse(args).InvokeAsync();
+
