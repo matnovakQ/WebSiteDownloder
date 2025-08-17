@@ -40,7 +40,8 @@ public class WebSiteDownloadingIntergrationTests
         // Assert
         Assert.True(Directory.Exists("results"), "Results directory should exist after command execution.");
         Assert.Equal(1000, Directory.GetFiles("results").Length);
+
         //cleanup
-        //Directory.Delete("results", true);
+        Directory.Delete("results", true);
     }
 }
