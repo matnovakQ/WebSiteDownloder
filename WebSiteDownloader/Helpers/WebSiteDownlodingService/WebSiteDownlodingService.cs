@@ -7,6 +7,7 @@ namespace WebSiteDownloader.Helpers.WebSiteDownlodingService;
 public class WebSiteDownlodingService : IWebSiteDownlodingService
 {
     private readonly ResiliencePipeline _pipeline;
+    private readonly HttpClient httpClient;
     public WebSiteDownlodingService()
     {
         _pipeline = new ResiliencePipelineBuilder()
@@ -23,6 +24,8 @@ public class WebSiteDownlodingService : IWebSiteDownlodingService
                 Timeout = TimeSpan.FromSeconds(10)
             })
             .Build();
+        
+        httpClient = new HttpClient();
     }
 
     public async Task<WebSiteDetails[]> DownloadWebSitesAsync(List<string> urls)
@@ -33,11 +36,9 @@ public class WebSiteDownlodingService : IWebSiteDownlodingService
 
     private async Task<WebSiteDetails> DownloadWebsiteAsync(string url)
     {
-        using var httpClient = new HttpClient();
-
         try
         {
-            var response = await _pipeline.ExecuteAsync(async ct => await httpClient.GetAsync("https://modularmonolith.com", ct));
+            var response = await _pipeline.ExecuteAsync(async ct => await httpClient.GetAsync(url, ct));
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             return new WebSiteDetails(url, content);
